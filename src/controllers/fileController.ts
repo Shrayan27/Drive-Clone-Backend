@@ -50,14 +50,7 @@ export const uploadFile = async (
     // Use multer middleware
     upload.single("file")(req, res, async (err) => {
       if (err) {
-        if (err instanceof multer.MulterError) {
-          if (err.code === "LIMIT_FILE_SIZE") {
-            res.status(400).json({ error: "File too large" });
-            return;
-          }
-        }
-        res.status(400).json({ error: err.message });
-        return;
+        return res.status(400).json({ error: err.message });
       }
 
       if (!req.file) {

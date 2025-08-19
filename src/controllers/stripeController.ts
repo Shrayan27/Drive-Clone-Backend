@@ -65,54 +65,35 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
 };
 
 export const handleWebhook = async (req: Request, res: Response) => {
-  // Check if Stripe is initialized
   if (!stripe) {
-    return res
-      .status(503)
-      .json({ error: "Stripe payment service is not available" });
+    return res.status(503).json({ error: "Stripe payment service is not available" });
   }
-
   const sig = req.headers["stripe-signature"];
-
   if (!sig) {
     return res.status(400).json({ error: "Missing signature" });
   }
-
   try {
     if (!process.env.STRIPE_WEBHOOK_SECRET) {
       return res.status(500).json({ error: "Webhook secret not configured" });
     }
-
-    const event = stripe.webhooks.constructEvent(
-      req.body,
-      sig,
-      process.env.STRIPE_WEBHOOK_SECRET
-    );
-
+    const event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
     switch (event.type) {
       case "checkout.session.completed":
-        const session = event.data.object as any;
-        await handleCheckoutCompleted(session);
+        await handleCheckoutCompleted(event.data.object as any);
         break;
-
       case "customer.subscription.updated":
-        const subscription = event.data.object as any;
-        await handleSubscriptionUpdated(subscription);
+        await handleSubscriptionUpdated(event.data.object as any);
         break;
-
       case "customer.subscription.deleted":
-        const deletedSubscription = event.data.object as any;
-        await handleSubscriptionDeleted(deletedSubscription);
+        await handleSubscriptionDeleted(event.data.object as any);
         break;
-
       default:
         console.log(`Unhandled event type: ${event.type}`);
     }
-
-    res.json({ received: true });
+    return res.json({ received: true });
   } catch (error) {
     console.error("Webhook error:", error);
-    res.status(400).json({ error: "Webhook signature verification failed" });
+    return res.status(400).json({ error: "Webhook signature verification failed" });
   }
 };
 
@@ -221,35 +202,27 @@ const handleSubscriptionDeleted = async (subscription: any) => {
 export const getSubscriptionStatus = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
-
     if (!userId) {
       return res.status(400).json({ error: "User ID is required" });
     }
-
-    // Query the database for actual subscription data
     const result = await pool.query(
-      `SELECT subscription_plan, subscription_status, storage_limit, stripe_subscription_id 
-       FROM users 
-       WHERE id = $1`,
+      `SELECT subscription_plan, subscription_status, storage_limit, stripe_subscription_id FROM users WHERE id = $1`,
       [userId]
     );
-
     if (result.rowCount === 0) {
       return res.status(404).json({ error: "User not found" });
     }
-
     const user = result.rows[0];
     const subscription = {
       plan: user.subscription_plan || "free",
       status: user.subscription_status || "inactive",
-      storageLimit: user.storage_limit || 5 * 1024 * 1024 * 1024, // 5GB default
+      storageLimit: user.storage_limit || 5 * 1024 * 1024 * 1024,
       subscriptionId: user.stripe_subscription_id,
     };
-
-    res.json(subscription);
+    return res.json(subscription);
   } catch (error) {
     console.error("Error fetching subscription status:", error);
-    res.status(500).json({ error: "Failed to fetch subscription status" });
+    return res.status(500).json({ error: "Failed to fetch subscription status" });
   }
 };
 
