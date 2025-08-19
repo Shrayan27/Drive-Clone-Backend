@@ -258,10 +258,7 @@ export const cancelSubscription = async (req: Request, res: Response) => {
         ["canceled", new Date(), userId, subscriptionId]
       );
 
-      res.json({
-        message:
-          "Subscription will be canceled at the end of the current period",
-      });
+      return res.json({ message: "Subscription cancelled" });
     } catch (stripeError) {
       console.error("Stripe cancellation error:", stripeError);
       res.status(500).json({ error: "Failed to cancel subscription" });
@@ -304,7 +301,7 @@ export const reactivateSubscription = async (req: Request, res: Response) => {
         ["active", new Date(), userId, subscriptionId]
       );
 
-      res.json({ message: "Subscription reactivated successfully" });
+      return res.json({ message: "Subscription reactivated" });
     } catch (stripeError) {
       console.error("Stripe reactivation error:", stripeError);
       res.status(500).json({ error: "Failed to reactivate subscription" });

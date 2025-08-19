@@ -179,6 +179,7 @@ export const uploadFile = async (
           createdAt: savedFile.created_at,
         },
       });
+      return; // <-- Add this at the end of the callback
     });
   } catch (error) {
     console.error("File upload error:", error);
