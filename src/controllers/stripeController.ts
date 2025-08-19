@@ -261,11 +261,11 @@ export const cancelSubscription = async (req: Request, res: Response) => {
       return res.json({ message: "Subscription cancelled" });
     } catch (stripeError) {
       console.error("Stripe cancellation error:", stripeError);
-      res.status(500).json({ error: "Failed to cancel subscription" });
+      return res.status(500).json({ error: "Failed to cancel subscription" });
     }
   } catch (error) {
     console.error("Error canceling subscription:", error);
-    res.status(500).json({ error: "Failed to cancel subscription" });
+    return res.status(500).json({ error: "Failed to cancel subscription" });
   }
 };
 
@@ -304,10 +304,10 @@ export const reactivateSubscription = async (req: Request, res: Response) => {
       return res.json({ message: "Subscription reactivated" });
     } catch (stripeError) {
       console.error("Stripe reactivation error:", stripeError);
-      res.status(500).json({ error: "Failed to reactivate subscription" });
+      return res.status(500).json({ error: "Failed to reactivate subscription" });
     }
   } catch (error) {
     console.error("Error reactivating subscription:", error);
-    res.status(500).json({ error: "Failed to reactivate subscription" });
+    return res.status(500).json({ error: "Failed to reactivate subscription" });
   }
 };
