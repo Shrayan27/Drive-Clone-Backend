@@ -50,14 +50,17 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
         },
       });
 
-      res.json({ sessionId: session.id });
+      return res.json({ sessionId: session.id });
     } catch (stripeError) {
       console.error("Stripe API error:", stripeError);
-      res.status(500).json({ error: "Stripe service error" });
+      return res.status(500).json({ error: "Stripe service error" });
     }
   } catch (error) {
     console.error("Stripe checkout error:", error);
-    res.status(500).json({ error: "Failed to create checkout session" });
+    return res.status(500).json({
+      error:
+        error instanceof Error ? error.message : String(error),
+    });
   }
 };
 

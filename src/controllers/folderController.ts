@@ -148,7 +148,9 @@ export const getFolders = async (
     res.json({
       folders,
       files,
-      currentPath: parentId ? await getCurrentPath(parentId, userId) : "/",
+      currentPath: parentId && typeof parentId === "string"
+        ? await getCurrentPath(parentId, userId)
+        : "/",
     });
   } catch (error) {
     console.error("Get folders error:", error);

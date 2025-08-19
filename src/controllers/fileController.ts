@@ -67,7 +67,10 @@ export const uploadFile = async (
 
       const { folderId, name } = req.body;
       const file = req.file;
-      const userId = req.user.id;
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
 
       // Check storage limit
       const userResult = await pool.query(
@@ -241,7 +244,7 @@ export const getFiles = async (req: Request, res: Response): Promise<void> => {
 
     if (validSortFields.includes(sortBy as string)) {
       query += ` ORDER BY f.${sortBy}`;
-      if (validSortOrders.includes(sortOrder as string)) {
+      if (typeof sortOrder === "string") {
         query += ` ${sortOrder.toUpperCase()}`;
       }
     } else {
