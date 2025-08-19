@@ -23,7 +23,7 @@ app.use((0, cors_1.default)({
     origin: process.env.NODE_ENV === "production"
         ? ["https://yourdomain.com"]
         : [
-            "http://localhost:3000",
+            "https://drive-clone-backend-7ojr.onrender.com",
             "http://localhost:3001",
             "http://localhost:5001",
         ],

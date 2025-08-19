@@ -26,7 +26,7 @@ export class CollaborationServer {
   constructor(server: HTTPServer) {
     this.io = new SocketIOServer(server, {
       cors: {
-        origin: process.env.CLIENT_URL || "http://localhost:3000",
+        origin: process.env.CLIENT_URL || "https://drive-clone-backend-7ojr.onrender.com",
         methods: ["GET", "POST"],
         credentials: true
       }

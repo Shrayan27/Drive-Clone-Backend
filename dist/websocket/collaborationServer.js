@@ -9,7 +9,7 @@ class CollaborationServer {
         this.fileCollaborations = new Map();
         this.io = new socket_io_1.Server(server, {
             cors: {
-                origin: process.env.CLIENT_URL || "http://localhost:3000",
+                origin: process.env.CLIENT_URL || "https://drive-clone-backend-7ojr.onrender.com",
                 methods: ["GET", "POST"],
                 credentials: true
             }
