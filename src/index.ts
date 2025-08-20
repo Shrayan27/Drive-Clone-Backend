@@ -28,7 +28,7 @@ app.use(
         ? ["https://yourdomain.com"]
         : [
             "https://drive-clone-backend-7ojr.onrender.com",
-            "http://localhost:3001",
+            "https://driveclonefrontend.netlify.app/",
             "http://localhost:5001",
           ],
     credentials: true,
