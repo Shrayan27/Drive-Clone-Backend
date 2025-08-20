@@ -29,6 +29,7 @@ app.use(
         : [
             "https://drive-clone-backend-7ojr.onrender.com",
             "https://driveclone-297h.vercel.app/",
+            "https://driveclonefrontend.netlify.app/",
             "http://localhost:5001",
           ],
     credentials: true,
