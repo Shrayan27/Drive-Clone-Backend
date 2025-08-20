@@ -28,7 +28,7 @@ app.use(
         ? ["https://yourdomain.com"]
         : [
             "https://drive-clone-backend-7ojr.onrender.com",
-            "https://driveclone-er3v.vercel.app/",
+            "https://driveclone-297h.vercel.app/",
             "http://localhost:5001",
           ],
     credentials: true,
