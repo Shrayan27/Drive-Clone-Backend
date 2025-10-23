@@ -8,9 +8,7 @@ if (
   process.env.STRIPE_SECRET_KEY.trim() !== ""
 ) {
   try {
-    stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-      apiVersion: "2025-07-30.basil",
-    });
+    stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
     console.log("Stripe initialized successfully");
   } catch (error) {
     console.error("Failed to initialize Stripe:", error);
